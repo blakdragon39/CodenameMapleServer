@@ -1,6 +1,6 @@
 package com.blakdragon.maple.services
 
-import com.blakdragon.maple.models.TestModel
+import com.blakdragon.maple.models.User
 import org.springframework.data.mongodb.repository.MongoRepository
 
-interface TestModelDAO : MongoRepository<TestModel, String>
+interface UserDAO : MongoRepository<User, String>
