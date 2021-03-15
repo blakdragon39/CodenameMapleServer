@@ -7,9 +7,11 @@ import org.springframework.boot.runApplication
 
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
+import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 
 @SpringBootApplication
+@EnableSwagger2
 class MapleApplication(private val userDAO: UserDAO) : ApplicationRunner {
 
     private val log = LogFactory.getLog(MapleApplication::class.java)
