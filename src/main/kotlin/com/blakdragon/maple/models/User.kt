@@ -10,6 +10,20 @@ data class User(
     @Id val id: String? = null,
     @Indexed(unique = true) val email: String,
     val passwordHash: String,
-    val joinDate: LocalDate,
+    val joinDate: Long,
     val displayName: String,
+) {
+    fun toUserResponse() = UserResponse(this);
+}
+
+data class RegisterRequest(
+    val email: String,
+    val password: String,
+    val displayName: String
 )
+
+class UserResponse(user: User) {
+    val id = user.id
+    val joinDate = user.joinDate
+    val displayName = user.displayName
+}
