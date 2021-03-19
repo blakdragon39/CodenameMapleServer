@@ -14,7 +14,9 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 @EnableSwagger2
 class MapleApplication(private val userDAO: UserDAO) : ApplicationRunner {
 
-    private val log = LogFactory.getLog(MapleApplication::class.java)
+    companion object {
+        val log = LogFactory.getLog(MapleApplication::class.java)
+    }
 
     override fun run(args: ApplicationArguments) {
         //todo startup logic
