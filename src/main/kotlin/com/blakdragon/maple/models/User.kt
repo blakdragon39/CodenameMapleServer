@@ -12,6 +12,8 @@ data class User(
     val passwordHash: String,
     val joinDate: Long,
     val displayName: String,
+    var token: String? = null,
+    var tokenExpiry: Long? = null
 ) {
     fun toUserResponse() = UserResponse(this);
 }
@@ -22,8 +24,18 @@ data class RegisterRequest(
     val displayName: String
 )
 
-class UserResponse(user: User) {
+data class LoginRequest(
+    val email: String,
+    val password: String
+)
+
+open class UserResponse(user: User) {
     val id = user.id
     val joinDate = user.joinDate
     val displayName = user.displayName
+}
+
+class UserLoginResponse(user: User) : UserResponse(user) {
+    val token = user.token
+    val tokenExpiry = user.tokenExpiry
 }

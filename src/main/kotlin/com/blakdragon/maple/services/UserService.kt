@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
 
 @Service
-class UserService(val userDAO: UserDAO) : BasicCrud<String, User> {
+class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
 
     override fun getAll(): List<User> = userDAO.findAll()
 
@@ -25,7 +25,7 @@ class UserService(val userDAO: UserDAO) : BasicCrud<String, User> {
             return userDAO.insert(obj)
         } catch (e : DuplicateKeyException) {
             MapleApplication.log.info(e);
-            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "That email already in use")
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "That email is already in use")
         }
     }
 
@@ -43,4 +43,6 @@ class UserService(val userDAO: UserDAO) : BasicCrud<String, User> {
             userDAO.delete(this)
         }
     }
+
+    fun getByEmail(email: String): User? = userDAO.findByEmail(email)
 }
