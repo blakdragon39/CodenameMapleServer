@@ -21,6 +21,7 @@ class MapleApplication(private val userDAO: UserDAO) : ApplicationRunner {
     override fun run(args: ApplicationArguments) {
         //todo startup logic
     }
+
 }
 
 fun main(args: Array<String>) {

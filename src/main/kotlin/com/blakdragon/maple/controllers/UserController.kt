@@ -17,6 +17,7 @@ class UserController(private val userService: UserService) {
     @GetMapping("/{id}")
     fun get(@PathVariable id: String): UserResponse? = userService.getById(id)?.toUserResponse()
 
+    //todo email verification
     @PostMapping
     fun registerUser(@RequestBody request: RegisterRequest): UserResponse {
         val passwordHash = BCrypt.hashpw(request.password, BCrypt.gensalt(12))

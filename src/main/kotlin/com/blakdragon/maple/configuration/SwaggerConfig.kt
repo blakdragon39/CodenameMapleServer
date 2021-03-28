@@ -12,6 +12,7 @@ class SwaggerConfig {
 
     @Bean
     fun api(): Docket {
+        //todo specify return codes, types
         return Docket(DocumentationType.SWAGGER_2)
             .select()
             .apis(RequestHandlerSelectors.any())
