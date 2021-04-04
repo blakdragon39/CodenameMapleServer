@@ -6,6 +6,7 @@ import com.blakdragon.maple.models.UserResponse
 import com.blakdragon.maple.services.UserService
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("api/users")
@@ -18,6 +19,7 @@ class UserController(private val userService: UserService) {
     fun get(@PathVariable id: String): UserResponse? = userService.getById(id)?.toUserResponse()
 
     //todo email verification
+    @Throws(ResponseStatusException::class)
     @PostMapping
     fun registerUser(@RequestBody request: RegisterRequest): UserResponse {
         val passwordHash = BCrypt.hashpw(request.password, BCrypt.gensalt(12))
