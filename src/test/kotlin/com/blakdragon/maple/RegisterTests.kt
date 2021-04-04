@@ -11,13 +11,13 @@ import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-val firstUserRequest: RegisterRequest = RegisterRequest(
+private val firstUserRequest: RegisterRequest = RegisterRequest(
     email = "1",
     password = "1",
     displayName = "1"
 )
 
-val secondUserRequest: RegisterRequest = RegisterRequest(
+private val secondUserRequest: RegisterRequest = RegisterRequest(
     email = "2",
     password = "2",
     displayName = "2"
@@ -31,11 +31,6 @@ class RegisterTests {
 
     @Autowired
     private lateinit var userDAO: UserDAO
-
-    @BeforeEach
-    fun beforeEach() {
-        userDAO.deleteAll()
-    }
 
     @AfterEach
     fun afterEach() {
