@@ -9,5 +9,4 @@ class MapleApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }
