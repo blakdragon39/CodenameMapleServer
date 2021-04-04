@@ -26,11 +26,9 @@ private val secondUserRequest: RegisterRequest = RegisterRequest(
 @SpringBootTest
 class RegisterTests {
 
-    @Autowired
-    private lateinit var userController: UserController
+    @Autowired private lateinit var userController: UserController
 
-    @Autowired
-    private lateinit var userDAO: UserDAO
+    @Autowired private lateinit var userDAO: UserDAO
 
     @AfterEach
     fun afterEach() {

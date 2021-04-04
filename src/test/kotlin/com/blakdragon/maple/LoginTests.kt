@@ -7,46 +7,41 @@ import com.blakdragon.maple.models.RegisterRequest
 import com.blakdragon.maple.services.UserDAO
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertDoesNotThrow
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
 
-private val firstUserLogin: LoginRequest = LoginRequest(
-    email = "1",
-    password = "1"
-)
-
 private val firstUserRegistration: RegisterRequest = RegisterRequest(
-    email = firstUserLogin.email,
-    password = firstUserLogin.password,
+    email = "1",
+    password = "1",
     displayName = "1"
 )
 
-private val secondUserLogin: LoginRequest = LoginRequest(
-    email = "2",
-    password = "2"
+private val firstUserLogin: LoginRequest = LoginRequest(
+    email = firstUserRegistration.email,
+    password = firstUserRegistration.password
 )
 
 private val secondUserRegistration: RegisterRequest = RegisterRequest(
-    email = firstUserLogin.email,
-    password = firstUserLogin.password,
+    email = "2",
+    password = "2",
     displayName = "2"
+)
+
+private val secondUserLogin: LoginRequest = LoginRequest(
+    email = secondUserRegistration.email,
+    password = secondUserRegistration.password
 )
 
 @SpringBootTest
 class LoginTests {
 
-    @Autowired
-    private lateinit var userController: UserController
+    @Autowired private lateinit var userController: UserController
+    @Autowired private lateinit var loginController: LoginController
 
-    @Autowired
-    private lateinit var loginController: LoginController
-
-    @Autowired
-    private lateinit var userDAO: UserDAO
+    @Autowired private lateinit var userDAO: UserDAO
 
     @AfterEach
     fun afterEach() {
