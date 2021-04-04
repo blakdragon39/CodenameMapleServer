@@ -20,6 +20,7 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
 
     override fun getById(id: String): User? = userDAO.findByIdOrNull(id)
 
+    @Throws(ResponseStatusException::class)
     override fun insert(obj: User): User {
         try {
             return userDAO.insert(obj)
