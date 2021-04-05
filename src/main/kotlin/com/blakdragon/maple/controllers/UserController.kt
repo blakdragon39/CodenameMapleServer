@@ -23,7 +23,7 @@ class UserController(
     @GetMapping("/{id}")
     fun get(@PathVariable id: String): UserResponse? = userService.getById(id)?.toUserResponse()
 
-    @GetMapping("/{id}/pets")
+    @GetMapping("/{userId}/pets")
     fun getPets(@PathVariable userId: String): List<Pet> = petService.getByUserId(userId)
 
     //todo email verification
