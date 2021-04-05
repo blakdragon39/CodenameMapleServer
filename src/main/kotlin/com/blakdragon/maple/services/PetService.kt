@@ -35,5 +35,5 @@ class PetService(private val petDAO: PetDAO) : BasicCrud<String, Pet> {
         }
     }
 
-    //todo: get by user id
+    fun getByUserId(userId: String): List<Pet> = petDAO.findByUserId(userId)
 }

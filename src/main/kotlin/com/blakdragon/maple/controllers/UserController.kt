@@ -1,8 +1,10 @@
 package com.blakdragon.maple.controllers
 
+import com.blakdragon.maple.models.Pet
 import com.blakdragon.maple.models.RegisterRequest
 import com.blakdragon.maple.models.User
 import com.blakdragon.maple.models.UserResponse
+import com.blakdragon.maple.services.PetService
 import com.blakdragon.maple.services.UserService
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.web.bind.annotation.*
@@ -10,13 +12,19 @@ import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("api/users")
-class UserController(private val userService: UserService) {
+class UserController(
+    private val userService: UserService,
+    private val petService: PetService
+) {
 
     @GetMapping
     fun getAll(): List<UserResponse> = userService.getAll().map { it.toUserResponse() }
 
     @GetMapping("/{id}")
     fun get(@PathVariable id: String): UserResponse? = userService.getById(id)?.toUserResponse()
+
+    @GetMapping("/{id}/pets")
+    fun getPets(@PathVariable userId: String): List<Pet> = petService.getByUserId(userId)
 
     //todo email verification
     @Throws(ResponseStatusException::class)

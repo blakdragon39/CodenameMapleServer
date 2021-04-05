@@ -8,4 +8,6 @@ interface UserDAO : MongoRepository<User, String> {
     fun findByEmail(email: String): User?
 }
 
-interface PetDAO : MongoRepository<Pet, String>
+interface PetDAO : MongoRepository<Pet, String> {
+    fun findByUserId(userId: String): List<Pet>
+}
