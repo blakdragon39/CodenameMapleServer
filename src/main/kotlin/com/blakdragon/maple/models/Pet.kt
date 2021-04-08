@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.mapping.Document
 data class Pet(
     @Id val id: String? = null,
     val userId: String,
+    val name: String, //todo limit size, characters?
     val species: PetSpecies,
     val kit: PetKit
 )
@@ -18,7 +19,13 @@ enum class PetSpecies {
     Cow,
     Horse,
     Dolphin,
-    Dragon
+    Dragon;
+
+    companion object {
+        fun fromString(speciesString: String): PetSpecies? {
+            return values().firstOrNull { it.toString().equals(speciesString, ignoreCase = true) }
+        }
+    }
 }
 
 enum class PetKit {
@@ -31,6 +38,7 @@ enum class PetKit {
 }
 
 data class CreatePetRequest(
-    val id: String,
-    val species: PetSpecies,
+    val userId: String,
+    val name: String,
+    val species: String,
 )

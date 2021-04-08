@@ -11,7 +11,7 @@ data class User(
     @Indexed(unique = true) val email: String,
     val passwordHash: String,
     val joinDate: Long,
-    val displayName: String,
+    val displayName: String, //todo limit size, characters?
     var token: String? = null,
     var tokenExpiry: Long? = null
 ) {

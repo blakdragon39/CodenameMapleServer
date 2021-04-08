@@ -76,12 +76,12 @@ class PetTests {
 
     @Test
     fun createPets() {
-        val catResponse = petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, PetSpecies.Cat))
+        val catResponse = petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, "", PetSpecies.Cat.toString()))
 
         assertEquals(catResponse.species, PetSpecies.Cat)
         assertEquals(petController.getAll().size, 1)
 
-        val dragonResponse = petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, PetSpecies.Dragon))
+        val dragonResponse = petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, "", PetSpecies.Dragon.toString()))
 
         assertEquals(dragonResponse.species, PetSpecies.Dragon)
         assertEquals(petController.getAll().size, 2)
@@ -90,7 +90,7 @@ class PetTests {
     @Test
     fun createPetWrongUser() {
         try {
-            petController.createPet(firstUser.token!!, CreatePetRequest("Wrong ID", PetSpecies.Dog))
+            petController.createPet(firstUser.token!!, CreatePetRequest("Wrong ID", "", PetSpecies.Dog.toString()))
         } catch (e: ResponseStatusException) {
             assertEquals(e.status, HttpStatus.NOT_FOUND)
             assertTrue { petController.getAll().isEmpty() }
@@ -100,7 +100,7 @@ class PetTests {
     @Test
     fun createPetWrongAuth() {
         try {
-            petController.createPet("Wrong Token", CreatePetRequest(firstUser.id!!, PetSpecies.Cow))
+            petController.createPet("Wrong Token", CreatePetRequest(firstUser.id!!, "", PetSpecies.Cow.toString()))
         } catch (e: ResponseStatusException) {
             assertEquals(e.status, HttpStatus.FORBIDDEN)
             assertTrue { petController.getAll().isEmpty() }
@@ -109,10 +109,10 @@ class PetTests {
 
     @Test
     fun getPetsByUser() {
-        petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, PetSpecies.Rabbit))
-        petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, PetSpecies.Horse))
+        petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, "", PetSpecies.Rabbit.toString()))
+        petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, "", PetSpecies.Horse.toString()))
 
-        petController.createPet(secondUser.token!!, CreatePetRequest(secondUser.id!!, PetSpecies.Cat))
+        petController.createPet(secondUser.token!!, CreatePetRequest(secondUser.id!!, "", PetSpecies.Cat.toString()))
 
         val firstUserPets = userController.getPets(firstUser.id!!)
         assertEquals(firstUserPets.size, 2)
@@ -125,4 +125,6 @@ class PetTests {
     fun getPetsNoUser() {
         assertEquals(userController.getPets("No ID").size, 0)
     }
+
+    //todo test invalid species
 }
