@@ -37,13 +37,13 @@ class UserPetsController(
         ))
     }
 
-    @GetMapping("/{userId}/pets/current")
+    @GetMapping("/current")
     fun getCurrentPet(@PathVariable userId: String): Pet? {
         val user = userService.getById(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
         return user.currentPetId?.let { petService.getById(it) }
     }
 
-    @PostMapping("/{userId}/pets/current/{petId}")
+    @PostMapping("/current/{petId}")
     fun setCurrentPet(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable userId: String,
