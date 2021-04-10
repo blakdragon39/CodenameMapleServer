@@ -55,7 +55,7 @@ private val secondUserPetRequest = CreatePetRequest(
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UserPetTests {
+class SetCurrentPetTests {
 
     @Autowired private lateinit var userController: UserController
     @Autowired private lateinit var loginController: LoginController
@@ -103,29 +103,29 @@ class UserPetTests {
 
     @Test
     fun noCurrentPet() {
-        val firstResponse = userController.get(firstUser.id!!)
-        assertNull(firstResponse!!.currentPetId)
+        val firstResponse = userPetsController.getCurrentPet(firstUser.id!!)
+        assertNull(firstResponse)
 
-        val secondResponse = userController.get(secondUser.id!!)
-        assertNull(secondResponse!!.currentPetId)
+        val secondResponse = userPetsController.getCurrentPet(secondUser.id!!)
+        assertNull(secondResponse)
     }
 
     @Test
     fun setCurrentPet() {
         userPetsController.setCurrentPet(firstUser.token!!, firstUser.id!!, firstUserFirstPet.id!!)
-        var response = userController.get(firstUser.id!!)
+        var responsePet = userPetsController.getCurrentPet(firstUser.id!!)
 
-        assertNotNull(response?.currentPetId)
-        assertEquals(response?.currentPetId, firstUserFirstPet.id)
+        assertNotNull(responsePet)
+        assertEquals(responsePet.id, firstUserFirstPet.id)
 
         userPetsController.setCurrentPet(firstUser.token!!, firstUser.id!!, firstUserSecondPet.id!!)
-        response = userController.get(firstUser.id!!)
+        responsePet = userPetsController.getCurrentPet(firstUser.id!!)
 
-        assertNotNull(response?.currentPetId)
-        assertEquals(response?.currentPetId, firstUserSecondPet.id)
+        assertNotNull(responsePet)
+        assertEquals(responsePet.id, firstUserSecondPet.id)
 
-        response = userController.get(secondUser.id!!)
-        assertNull(response!!.currentPetId)
+        responsePet = userPetsController.getCurrentPet(secondUser.id!!)
+        assertNull(responsePet)
     }
 
     @Test

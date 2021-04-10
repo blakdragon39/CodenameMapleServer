@@ -3,7 +3,6 @@ package com.blakdragon.maple.models
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.index.Indexed
 import org.springframework.data.mongodb.core.mapping.Document
-import java.time.LocalDate
 
 @Document
 data class User(
@@ -32,9 +31,7 @@ data class LoginRequest(
 
 open class UserResponse(user: User) {
     val id = user.id
-    val joinDate = user.joinDate
     val displayName = user.displayName
-    val currentPetId = user.currentPetId
 }
 
 class UserLoginResponse(user: User) : UserResponse(user) {
