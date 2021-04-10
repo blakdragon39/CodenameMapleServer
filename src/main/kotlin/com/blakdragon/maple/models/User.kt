@@ -34,6 +34,7 @@ open class UserResponse(user: User) {
     val id = user.id
     val joinDate = user.joinDate
     val displayName = user.displayName
+    val currentPetId = user.currentPetId
 }
 
 class UserLoginResponse(user: User) : UserResponse(user) {

@@ -13,13 +13,13 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
 
-private val firstUserRegistration: RegisterRequest = RegisterRequest(
+private val firstUserRegistration = RegisterRequest(
     email = "1",
     password = "1",
     displayName = "1"
 )
 
-private val firstUserLogin: LoginRequest = LoginRequest(
+private val firstUserLogin = LoginRequest(
     email = firstUserRegistration.email,
     password = firstUserRegistration.password
 )

@@ -15,24 +15,24 @@ import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-private val firstUserRequest: RegisterRequest = RegisterRequest(
+private val firstUserRequest = RegisterRequest(
     email = "1",
     password = "1",
     displayName = "1"
 )
 
-private val firstUserLogin: LoginRequest = LoginRequest(
+private val firstUserLogin = LoginRequest(
     email = firstUserRequest.email,
     password = firstUserRequest.password
 )
 
-private val secondUserRequest: RegisterRequest = RegisterRequest(
+private val secondUserRequest = RegisterRequest(
     email = "2",
     password = "2",
     displayName = "2"
 )
 
-private val secondUserLogin: LoginRequest = LoginRequest(
+private val secondUserLogin = LoginRequest(
     email = secondUserRequest.email,
     password = secondUserRequest.password
 )
