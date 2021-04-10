@@ -9,7 +9,8 @@ data class Pet(
     val userId: String,
     val name: String, //todo limit size, characters?
     val species: PetSpecies,
-    val kit: PetKit
+    val kit: PetKit,
+    val wellbeing: Wellbeing
 )
 
 enum class PetSpecies {
@@ -38,7 +39,6 @@ enum class PetKit {
 }
 
 data class CreatePetRequest(
-    val userId: String,
     val name: String,
     val species: String,
 )

@@ -1,6 +1,7 @@
 package com.blakdragon.maple.services
 
 import com.blakdragon.maple.models.Pet
+import com.blakdragon.maple.models.User
 import com.blakdragon.maple.utils.BasicCrud
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -36,4 +37,10 @@ class PetService(private val petDAO: PetDAO) : BasicCrud<String, Pet> {
     }
 
     fun getByUserId(userId: String): List<Pet> = petDAO.findByUserId(userId)
+
+    fun getByIdAndValidate(id: String, user: User): Pet {
+        val pet = getById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        if (pet.userId != user.id) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Pet doesn't belong to user")
+        return pet
+    }
 }

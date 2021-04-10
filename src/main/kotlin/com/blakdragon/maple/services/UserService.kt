@@ -20,7 +20,6 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
 
     override fun getById(id: String): User? = userDAO.findByIdOrNull(id)
 
-    @Throws(ResponseStatusException::class)
     override fun insert(obj: User): User {
         try {
             return userDAO.insert(obj)
@@ -30,7 +29,6 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
         }
     }
 
-    @Throws(ResponseStatusException::class)
     override fun update(obj: User): User {
         return if (obj.id != null && userDAO.existsById(obj.id)) {
             userDAO.save(obj)
@@ -43,6 +41,12 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
         return userDAO.findByIdOrNull(id)?.apply {
             userDAO.delete(this)
         }
+    }
+
+    fun getByIdAndValidate(id: String, token: String): User {
+        val user = getById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
+        if (token != user.token) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Pet creation not allowed")
+        return user
     }
 
     fun getByEmail(email: String): User? = userDAO.findByEmail(email)

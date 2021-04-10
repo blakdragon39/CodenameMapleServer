@@ -24,17 +24,6 @@ private val firstUserLogin: LoginRequest = LoginRequest(
     password = firstUserRegistration.password
 )
 
-private val secondUserRegistration: RegisterRequest = RegisterRequest(
-    email = "2",
-    password = "2",
-    displayName = "2"
-)
-
-private val secondUserLogin: LoginRequest = LoginRequest(
-    email = secondUserRegistration.email,
-    password = secondUserRegistration.password
-)
-
 @SpringBootTest
 class LoginTests {
 

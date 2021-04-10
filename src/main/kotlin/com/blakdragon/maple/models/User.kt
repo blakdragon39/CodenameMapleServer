@@ -13,7 +13,8 @@ data class User(
     val joinDate: Long,
     val displayName: String, //todo limit size, characters?
     var token: String? = null,
-    var tokenExpiry: Long? = null
+    var tokenExpiry: Long? = null,
+    var currentPetId: String? = null
 ) {
     fun toUserResponse() = UserResponse(this);
 }

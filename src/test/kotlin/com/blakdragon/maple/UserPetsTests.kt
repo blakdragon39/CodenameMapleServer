@@ -3,6 +3,7 @@ package com.blakdragon.maple
 import com.blakdragon.maple.controllers.LoginController
 import com.blakdragon.maple.controllers.PetController
 import com.blakdragon.maple.controllers.UserController
+import com.blakdragon.maple.controllers.UserPetsController
 import com.blakdragon.maple.models.*
 import com.blakdragon.maple.services.PetDAO
 import com.blakdragon.maple.services.UserDAO
@@ -43,6 +44,7 @@ class PetTests {
     @Autowired private lateinit var petController: PetController
     @Autowired private lateinit var userController: UserController
     @Autowired private lateinit var loginController: LoginController
+    @Autowired private lateinit var userPetsController: UserPetsController
 
     @Autowired private lateinit var petDAO: PetDAO
     @Autowired private lateinit var userDAO: UserDAO
@@ -76,21 +78,21 @@ class PetTests {
 
     @Test
     fun createPets() {
-        val catResponse = petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, "", PetSpecies.Cat.toString()))
+        val catResponse = userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Cat.toString()))
 
         assertEquals(catResponse.species, PetSpecies.Cat)
         assertEquals(petController.getAll().size, 1)
 
-        val dragonResponse = petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, "", PetSpecies.Dragon.toString()))
+        val dragonResponse = userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Dragon.toString()))
 
         assertEquals(dragonResponse.species, PetSpecies.Dragon)
         assertEquals(petController.getAll().size, 2)
     }
 
     @Test
-    fun createPetWrongUser() {
+    fun createPetWrongUserId() {
         try {
-            petController.createPet(firstUser.token!!, CreatePetRequest("Wrong ID", "", PetSpecies.Dog.toString()))
+            userPetsController.createPet(firstUser.token!!, "Wrong ID", CreatePetRequest("", PetSpecies.Dog.toString()))
         } catch (e: ResponseStatusException) {
             assertEquals(e.status, HttpStatus.NOT_FOUND)
             assertTrue { petController.getAll().isEmpty() }
@@ -100,31 +102,49 @@ class PetTests {
     @Test
     fun createPetWrongAuth() {
         try {
-            petController.createPet("Wrong Token", CreatePetRequest(firstUser.id!!, "", PetSpecies.Cow.toString()))
+            userPetsController.createPet("Wrong Token", firstUser.id!!, CreatePetRequest("", PetSpecies.Cow.toString()))
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.FORBIDDEN)
+            assertEquals(e.status, HttpStatus.UNAUTHORIZED)
+            assertTrue { petController.getAll().isEmpty() }
+        }
+    }
+
+    @Test
+    fun createPetWrongUser() {
+        try {
+            userPetsController.createPet(firstUser.token!!, secondUser.id!!, CreatePetRequest("", PetSpecies.Dog.toString()))
+        } catch (e: ResponseStatusException) {
+            assertEquals(e.status, HttpStatus.UNAUTHORIZED)
             assertTrue { petController.getAll().isEmpty() }
         }
     }
 
     @Test
     fun getPetsByUser() {
-        petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, "", PetSpecies.Rabbit.toString()))
-        petController.createPet(firstUser.token!!, CreatePetRequest(firstUser.id!!, "", PetSpecies.Horse.toString()))
+        userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Rabbit.toString()))
+        userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Horse.toString()))
 
-        petController.createPet(secondUser.token!!, CreatePetRequest(secondUser.id!!, "", PetSpecies.Cat.toString()))
+        userPetsController.createPet(secondUser.token!!, secondUser.id!!, CreatePetRequest("", PetSpecies.Cat.toString()))
 
-        val firstUserPets = userController.getPets(firstUser.id!!)
+        val firstUserPets = userPetsController.getPets(firstUser.id!!)
         assertEquals(firstUserPets.size, 2)
 
-        val secondUserPets = userController.getPets(secondUser.id!!)
+        val secondUserPets = userPetsController.getPets(secondUser.id!!)
         assertEquals(secondUserPets.size, 1)
     }
 
     @Test
     fun getPetsNoUser() {
-        assertEquals(userController.getPets("No ID").size, 0)
+        assertEquals(userPetsController.getPets("No ID").size, 0)
     }
 
-    //todo test invalid species
+    @Test
+    fun invalidSpecies() {
+        try {
+            userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", "Invalid Pet Species"))
+        } catch (e: ResponseStatusException) {
+            assertEquals(e.status, HttpStatus.BAD_REQUEST)
+            assertTrue { petController.getAll().isEmpty() }
+        }
+    }
 }
