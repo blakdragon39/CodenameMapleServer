@@ -48,13 +48,13 @@ class UserPetsController(
         @RequestHeader("Authorization") userToken: String,
         @PathVariable userId: String,
         @PathVariable petId: String
-    ): UserResponse {
+    ): Pet {
         val user = userService.getByIdAndValidate(userId, userToken)
         val pet = petService.getByIdAndValidate(petId, user)
 
         user.currentPetId = pet.id
         userService.update(user)
 
-        return UserResponse(user)
+        return pet
     }
 }
