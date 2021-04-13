@@ -39,7 +39,7 @@ private val secondUserLogin = LoginRequest(
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PetTests {
+class UserPetCreationTests {
 
     @Autowired private lateinit var petController: PetController
     @Autowired private lateinit var userController: UserController
