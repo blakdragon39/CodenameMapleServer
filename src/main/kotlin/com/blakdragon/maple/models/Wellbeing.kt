@@ -5,3 +5,9 @@ class Wellbeing(
     val hygiene: Int = 0,
     val mood: Int = 0
 )
+
+enum class WellbeingStat {
+    Hunger,
+    Hygiene,
+    Mood
+}

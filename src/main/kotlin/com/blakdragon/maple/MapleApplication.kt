@@ -1,5 +1,6 @@
 package com.blakdragon.maple
 
+import com.blakdragon.maple.models.WellbeingItem
 import com.blakdragon.maple.services.UserDAO
 import org.apache.commons.logging.LogFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -19,9 +20,19 @@ class MapleApplication(private val userDAO: UserDAO) : ApplicationRunner {
     }
 
     override fun run(args: ApplicationArguments) {
-        //todo startup logic
+        //startup logic
+        checkItemIdsUnique()
     }
 
+    private fun checkItemIdsUnique() {
+        val itemIdsList: MutableList<String> = mutableListOf()
+        itemIdsList.addAll(WellbeingItem.values().map { it.id })
+
+        itemIdsList
+            .groupBy { id -> id }
+            .filter { idGroup -> idGroup.value.size > 1 }
+            .forEach { idGroup -> throw Exception("Found duplicate key ${idGroup.key}") }
+    }
 }
 
 fun main(args: Array<String>) {
