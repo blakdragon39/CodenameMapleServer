@@ -64,7 +64,7 @@ class LoginTests {
                 password = "Incorrect Password"
             ))
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.NOT_FOUND)
+            assertEquals(HttpStatus.NOT_FOUND, e.status)
         }
     }
 }

@@ -41,7 +41,7 @@ class RegisterTests {
 
         userController.registerUser(firstUserRequest)
 
-        assertEquals(userController.getAll().size, 1)
+        assertEquals(1, userController.getAll().size)
     }
 
     @Test
@@ -51,16 +51,16 @@ class RegisterTests {
         try {
             userController.registerUser(firstUserRequest)
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.BAD_REQUEST)
+            assertEquals(HttpStatus.BAD_REQUEST, e.status)
         }
 
-        assertEquals(userController.getAll().size, 1)
+        assertEquals(1, userController.getAll().size)
     }
 
     @Test
     fun registerMultipleUsers() {
         userController.registerUser(firstUserRequest)
         userController.registerUser(secondUserRequest)
-        assertEquals(userController.getAll().size, 2)
+        assertEquals(2, userController.getAll().size)
     }
 }

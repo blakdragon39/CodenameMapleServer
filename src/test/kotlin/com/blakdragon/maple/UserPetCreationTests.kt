@@ -73,7 +73,7 @@ class UserPetCreationTests {
 
     @Test
     fun noPets() {
-        assertEquals(petController.getAll().size, 0)
+        assertEquals(0, petController.getAll().size)
     }
 
     @Test
@@ -81,12 +81,12 @@ class UserPetCreationTests {
         val catResponse = userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Cat.toString()))
 
         assertEquals(catResponse.species, PetSpecies.Cat)
-        assertEquals(petController.getAll().size, 1)
+        assertEquals(1, petController.getAll().size)
 
         val dragonResponse = userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Dragon.toString()))
 
         assertEquals(dragonResponse.species, PetSpecies.Dragon)
-        assertEquals(petController.getAll().size, 2)
+        assertEquals(2, petController.getAll().size)
     }
 
     @Test
@@ -94,7 +94,7 @@ class UserPetCreationTests {
         try {
             userPetsController.createPet(firstUser.token!!, "Wrong ID", CreatePetRequest("", PetSpecies.Dog.toString()))
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.NOT_FOUND)
+            assertEquals(HttpStatus.NOT_FOUND, e.status)
             assertTrue { petController.getAll().isEmpty() }
         }
     }
@@ -104,7 +104,7 @@ class UserPetCreationTests {
         try {
             userPetsController.createPet("Wrong Token", firstUser.id!!, CreatePetRequest("", PetSpecies.Cow.toString()))
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.UNAUTHORIZED)
+            assertEquals(HttpStatus.UNAUTHORIZED, e.status)
             assertTrue { petController.getAll().isEmpty() }
         }
     }
@@ -114,7 +114,7 @@ class UserPetCreationTests {
         try {
             userPetsController.createPet(firstUser.token!!, secondUser.id!!, CreatePetRequest("", PetSpecies.Dog.toString()))
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.UNAUTHORIZED)
+            assertEquals(HttpStatus.UNAUTHORIZED, e.status)
             assertTrue { petController.getAll().isEmpty() }
         }
     }
@@ -127,15 +127,15 @@ class UserPetCreationTests {
         userPetsController.createPet(secondUser.token!!, secondUser.id!!, CreatePetRequest("", PetSpecies.Cat.toString()))
 
         val firstUserPets = userPetsController.getPets(firstUser.id!!)
-        assertEquals(firstUserPets.size, 2)
+        assertEquals(2, firstUserPets.size)
 
         val secondUserPets = userPetsController.getPets(secondUser.id!!)
-        assertEquals(secondUserPets.size, 1)
+        assertEquals(1, secondUserPets.size)
     }
 
     @Test
     fun getPetsNoUser() {
-        assertEquals(userPetsController.getPets("No ID").size, 0)
+        assertEquals(0, userPetsController.getPets("No ID").size)
     }
 
     @Test
@@ -143,7 +143,7 @@ class UserPetCreationTests {
         try {
             userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", "Invalid Pet Species"))
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.BAD_REQUEST)
+            assertEquals(HttpStatus.BAD_REQUEST, e.status)
             assertTrue { petController.getAll().isEmpty() }
         }
     }

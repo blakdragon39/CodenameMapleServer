@@ -1,7 +1,7 @@
 package com.blakdragon.maple
 
-import com.blakdragon.maple.models.WellbeingItem
-import com.blakdragon.maple.services.UserDAO
+import com.blakdragon.maple.models.Item
+import com.blakdragon.maple.models.wellbeingItems
 import org.apache.commons.logging.LogFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
@@ -13,22 +13,28 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 
 @SpringBootApplication
 @EnableSwagger2
-class MapleApplication(private val userDAO: UserDAO) : ApplicationRunner {
+class MapleApplication() : ApplicationRunner {
 
     companion object {
         val log = LogFactory.getLog(MapleApplication::class.java)
+        lateinit var items: List<Item>
     }
 
     override fun run(args: ApplicationArguments) {
         //startup logic
+        initItems()
         checkItemIdsUnique()
     }
 
-    private fun checkItemIdsUnique() {
-        val itemIdsList: MutableList<String> = mutableListOf()
-        itemIdsList.addAll(WellbeingItem.values().map { it.id })
+    private fun initItems() {
+        val items: MutableList<Item> = mutableListOf()
+        items.addAll(wellbeingItems)
 
-        itemIdsList
+        MapleApplication.items = items
+    }
+
+    private fun checkItemIdsUnique() {
+        items
             .groupBy { id -> id }
             .filter { idGroup -> idGroup.value.size > 1 }
             .forEach { idGroup -> throw Exception("Found duplicate key ${idGroup.key}") }
