@@ -22,13 +22,13 @@ val wellbeingItems: List<WellbeingItem> = listOf(
     ),
     WellbeingItem(
         id = "wellbeingItem.apple",
-        displayName = "Sandwich",
+        displayName = "Apple",
         wellbeingStat = WellbeingStat.Hunger,
         effect = 1
     ),
     WellbeingItem(
         id = "wellbeingItem.steakDinner",
-        displayName = "Apple",
+        displayName = "Steak Dinner",
         wellbeingStat = WellbeingStat.Hunger,
         effect = 2
     ),
