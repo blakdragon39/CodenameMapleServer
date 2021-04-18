@@ -11,11 +11,14 @@ data class User(
     val passwordHash: String,
     val joinDate: Long,
     val displayName: String, //todo limit size, characters?
+
     var token: String? = null,
     var tokenExpiry: Long? = null,
-    var currentPetId: String? = null
+
+    var currentPetId: String? = null,
+    val items: MutableList<String> = mutableListOf()
 ) {
-    fun toUserResponse() = UserResponse(this);
+    fun toUserResponse() = UserResponse(this)
 }
 
 data class RegisterRequest(

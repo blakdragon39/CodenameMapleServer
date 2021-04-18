@@ -116,13 +116,13 @@ class SetCurrentPetTests {
         var responsePet = userPetsController.getCurrentPet(firstUser.id!!)
 
         assertNotNull(responsePet)
-        assertEquals(responsePet.id, firstUserFirstPet.id)
+        assertEquals(firstUserFirstPet.id, responsePet.id)
 
         userPetsController.setCurrentPet(firstUser.token!!, firstUser.id!!, firstUserSecondPet.id!!)
         responsePet = userPetsController.getCurrentPet(firstUser.id!!)
 
         assertNotNull(responsePet)
-        assertEquals(responsePet.id, firstUserSecondPet.id)
+        assertEquals(firstUserSecondPet.id, responsePet.id)
 
         responsePet = userPetsController.getCurrentPet(secondUser.id!!)
         assertNull(responsePet)
@@ -133,7 +133,7 @@ class SetCurrentPetTests {
         try {
             userPetsController.setCurrentPet(firstUser.token!!, secondUser.id!!, secondUserPet.id!!)
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.UNAUTHORIZED)
+            assertEquals(HttpStatus.UNAUTHORIZED, e.status)
         }
     }
 
@@ -142,7 +142,7 @@ class SetCurrentPetTests {
         try {
             userPetsController.setCurrentPet(firstUser.token!!, firstUser.id!!, secondUserPet.id!!)
         } catch (e: ResponseStatusException) {
-            assertEquals(e.status, HttpStatus.UNAUTHORIZED)
+            assertEquals(HttpStatus.UNAUTHORIZED, e.status)
         }
     }
 }
