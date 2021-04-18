@@ -3,12 +3,7 @@ package com.blakdragon.maple.controllers
 import com.blakdragon.maple.MapleApplication
 import com.blakdragon.maple.models.Item
 import com.blakdragon.maple.services.UserService
-import org.springframework.http.HttpStatus
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
-import org.springframework.web.server.ResponseStatusException
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("api/users/{userId}/items")
@@ -17,8 +12,8 @@ class UserItemsController(
 ) {
 
     @GetMapping
-    fun getItems(@PathVariable userId: String): List<Item> {
-        val user = userService.getById(userId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    fun getItems(@RequestHeader("Authorization") userToken: String, @PathVariable userId: String): List<Item> {
+        val user = userService.getByIdAndValidate(userId, userToken)
         return user.items.map { itemId -> MapleApplication.items.first { it.id == itemId } }
     }
 }

@@ -45,7 +45,7 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
 
     fun getByIdAndValidate(id: String, token: String): User {
         val user = getById(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")
-        if (token != user.token) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Pet creation not allowed")
+        if (token != user.token) throw ResponseStatusException(HttpStatus.UNAUTHORIZED, "Not allowed")
         //todo token expiry
         return user
     }

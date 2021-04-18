@@ -58,7 +58,7 @@ class UserItemsTests {
 
     @Test
     fun noItems() {
-        val result = userItemsController.getItems(firstUser.id!!)
+        val result = userItemsController.getItems(firstUser.token!!, firstUser.id!!)
         assertEquals(0, result.size)
     }
 
@@ -71,20 +71,20 @@ class UserItemsTests {
 
         user?.items?.add(item1.id)
         userService.update(user!!)
-        var response = userItemsController.getItems(user.id!!)
+        var response = userItemsController.getItems(user.token!!, user.id!!)
         assertEquals(1, response.size)
         assertTrue { response.contains(item1) }
 
 
         user.items.add(item2.id)
         userService.update(user)
-        response = userItemsController.getItems(user.id!!)
+        response = userItemsController.getItems(user.token!!,user.id!!)
         assertEquals(2, response.size)
         assertTrue { response.contains(item2) }
 
         user.items.add(item1.id)
         userService.update(user)
-        response = userItemsController.getItems(user.id!!)
+        response = userItemsController.getItems(user.token!!,user.id!!)
         assertEquals(3, response.size)
     }
 }
