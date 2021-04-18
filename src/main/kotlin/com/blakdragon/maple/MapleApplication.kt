@@ -20,10 +20,12 @@ class MapleApplication() : ApplicationRunner {
         lateinit var items: List<Item>
     }
 
+    //startup logic
     override fun run(args: ApplicationArguments) {
-        //startup logic
         initItems()
         checkItemIdsUnique()
+
+        initShops()
     }
 
     private fun initItems() {
@@ -38,6 +40,10 @@ class MapleApplication() : ApplicationRunner {
             .groupBy { id -> id }
             .filter { idGroup -> idGroup.value.size > 1 }
             .forEach { idGroup -> throw Exception("Found duplicate key ${idGroup.key}") }
+    }
+
+    private fun initShops() {
+
     }
 }
 
