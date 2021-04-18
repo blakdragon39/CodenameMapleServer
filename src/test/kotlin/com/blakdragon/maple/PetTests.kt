@@ -7,6 +7,7 @@ import com.blakdragon.maple.models.PetSpecies
 import com.blakdragon.maple.models.Wellbeing
 import com.blakdragon.maple.services.PetDAO
 import com.blakdragon.maple.services.PetService
+import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -43,6 +44,11 @@ class PetTests {
 
     @BeforeEach
     fun beforeEach() {
+        petDAO.deleteAll()
+    }
+
+    @AfterEach
+    fun afterEach() {
         petDAO.deleteAll()
     }
 
