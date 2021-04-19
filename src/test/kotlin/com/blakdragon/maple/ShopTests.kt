@@ -36,6 +36,6 @@ class ShopTests {
         shopController.addMoreItems(shops[0].id)
         val shop = shopController.getShop(shops[0].id)
 
-        assertTrue { shop.items.size > 0 }
+        assertTrue { shop.items.isNotEmpty() }
     }
 }
