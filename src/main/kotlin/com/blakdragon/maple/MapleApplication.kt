@@ -1,7 +1,6 @@
 package com.blakdragon.maple
 
 import com.blakdragon.maple.models.Item
-import com.blakdragon.maple.models.shops.shops
 import com.blakdragon.maple.models.wellbeingItems
 import org.apache.commons.logging.LogFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication

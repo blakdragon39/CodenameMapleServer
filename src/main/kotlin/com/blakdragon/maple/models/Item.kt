@@ -3,6 +3,7 @@ package com.blakdragon.maple.models
 //todo description
 abstract class Item (
     val id: String,
+    val description: String,
     val displayName: String
 ) {
 
