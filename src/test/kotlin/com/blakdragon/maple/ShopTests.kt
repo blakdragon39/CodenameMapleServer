@@ -38,4 +38,6 @@ class ShopTests {
 
         assertTrue { shop.items.isNotEmpty() }
     }
+
+    //todo test buying
 }

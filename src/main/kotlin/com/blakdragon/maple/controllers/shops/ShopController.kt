@@ -1,33 +1,61 @@
 package com.blakdragon.maple.controllers.shops
 
 import com.blakdragon.maple.MapleApplication
+import com.blakdragon.maple.models.shops.BuyRequest
 import com.blakdragon.maple.models.shops.ShopResponse
 import com.blakdragon.maple.services.ShopService
+import com.blakdragon.maple.services.UserService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 @RestController
 @RequestMapping("api/shops/{shopId}")
-class ShopController(private val shopService: ShopService) {
+class ShopController(
+    private val shopService: ShopService,
+    private val userService: UserService
+    ) {
 
     @GetMapping
     fun getShop(@PathVariable shopId: String): ShopResponse {
-        val shop = shopService.getById(shopId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        val shop = shopService.getByIdAndValidate(shopId)
         return ShopResponse(shop)
     }
 
     @PostMapping
     fun addMoreItems(@PathVariable shopId: String): ShopResponse {
-        val shop = shopService.getById(shopId) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+        var shop = shopService.getByIdAndValidate(shopId)
 
         for (i in 1 .. 3) {
             val random = MapleApplication.random.nextInt(MapleApplication.items.size)
             shop.items.add(MapleApplication.items[random].id)
         }
 
-        shopService.update(shop)
-
+        shop = shopService.update(shop)
         return ShopResponse(shop)
+    }
+
+    //todo handle multiple requests at once?
+    @PutMapping
+    fun buyItem(
+        @PathVariable shopId: String,
+        @RequestHeader("Authorization") userToken: String,
+        @RequestBody buyRequest: BuyRequest): ShopResponse {
+
+        var shop = shopService.getByIdAndValidate(shopId)
+        val user = userService.getByIdAndValidate(buyRequest.userId, userToken)
+
+        if (shop.items.contains(buyRequest.itemId)) {
+            shop.items.remove(buyRequest.itemId)
+            shop = shopService.update(shop)
+
+            //todo money
+            user.items.add(buyRequest.itemId)
+            userService.update(user)
+
+            return ShopResponse(shop)
+        } else {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, "Shop doesn't have this item")
+        }
     }
 }

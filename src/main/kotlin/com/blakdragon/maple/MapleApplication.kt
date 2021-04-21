@@ -2,7 +2,6 @@ package com.blakdragon.maple
 
 import com.blakdragon.maple.models.Item
 import com.blakdragon.maple.models.wellbeingItems
-import org.apache.commons.logging.LogFactory
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -17,7 +16,6 @@ import kotlin.random.Random
 class MapleApplication() : ApplicationRunner {
 
     companion object {
-        val log = LogFactory.getLog(MapleApplication::class.java)
         val random = Random(System.currentTimeMillis())
         lateinit var items: List<Item>
     }

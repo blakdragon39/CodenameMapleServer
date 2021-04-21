@@ -5,17 +5,16 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.web.filter.CommonsRequestLoggingFilter
 
 
-
-
 @Configuration
 class RequestLogConfig {
+
     @Bean
-    fun logFilter(): CommonsRequestLoggingFilter? {
+    fun logFilter(): CommonsRequestLoggingFilter {
         val filter = CommonsRequestLoggingFilter()
         filter.setIncludeQueryString(true)
         filter.setIncludePayload(true)
-        filter.setIncludeHeaders(false)
-        filter.setAfterMessagePrefix("REQUEST DATA : ")
+        filter.setIncludeHeaders(true)
+//        filter.setAfterMessagePrefix("REQUEST DATA : ")
         return filter
     }
 }

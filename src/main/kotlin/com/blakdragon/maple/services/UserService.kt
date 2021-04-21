@@ -24,7 +24,7 @@ class UserService(private val userDAO: UserDAO) : BasicCrud<String, User> {
         try {
             return userDAO.insert(obj)
         } catch (e : DuplicateKeyException) {
-            MapleApplication.log.info(e);
+            println(e)
             throw ResponseStatusException(HttpStatus.BAD_REQUEST, "That email is already in use")
         }
     }

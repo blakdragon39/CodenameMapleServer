@@ -14,6 +14,17 @@ import javax.annotation.PostConstruct
 @Service
 class ShopService(private val shopDAO: ShopDAO) : BasicCrud<String, Shop> {
 
+    @PostConstruct
+    private fun init() {
+        shops.forEach { shop ->
+            val foundShop = getById(shop.id)
+
+            if (foundShop == null) {
+                insert(shop)
+            }
+        }
+    }
+
     override fun getAll(): List<Shop> = shopDAO.findAll()
 
     override fun getAll(pageable: Pageable): Page<Shop> = shopDAO.findAll(pageable)
@@ -36,14 +47,7 @@ class ShopService(private val shopDAO: ShopDAO) : BasicCrud<String, Shop> {
         }
     }
 
-    @PostConstruct
-    private fun init() {
-        shops.forEach { shop ->
-            val foundShop = getById(shop.id)
-
-            if (foundShop == null) {
-                insert(shop)
-            }
-        }
+    fun getByIdAndValidate(id: String): Shop {
+        return shopDAO.findByIdOrNull(id) ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
     }
 }

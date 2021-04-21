@@ -1,20 +1,32 @@
 package com.blakdragon.maple.configuration
 
+import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.servlet.config.annotation.CorsRegistry
-
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import org.springframework.web.filter.CorsFilter
 
 
 @Configuration
-class MyConfiguration {
+class WebConfig {
+
     @Bean
-    fun corsConfigurer(): WebMvcConfigurer {
-        return object : WebMvcConfigurer {
-            override fun addCorsMappings(registry: CorsRegistry) {
-                registry.addMapping("/**")
-            }
+    fun corsFilterRegistration(): FilterRegistrationBean<*> {
+        val config = CorsConfiguration().apply {
+            applyPermitDefaultValues()
+            allowedOrigins = listOf("*")
+            allowedHeaders = listOf("*")
+            allowedMethods = listOf("*")
+            exposedHeaders = listOf("content-length")
+        }
+
+        val source = UrlBasedCorsConfigurationSource().apply {
+            registerCorsConfiguration("/**", config)
+        }
+
+        return FilterRegistrationBean(CorsFilter(source)).apply {
+            order = 0
         }
     }
 }
