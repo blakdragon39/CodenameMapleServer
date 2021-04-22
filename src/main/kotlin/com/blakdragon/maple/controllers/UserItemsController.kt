@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("api/users/{userId}/items")
 class UserItemsController(
-    val userService: UserService
+    private val userService: UserService
 ) {
 
     @GetMapping

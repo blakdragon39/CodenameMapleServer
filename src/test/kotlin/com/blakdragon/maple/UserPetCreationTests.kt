@@ -78,12 +78,12 @@ class UserPetCreationTests {
 
     @Test
     fun createPets() {
-        val catResponse = userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Cat.toString()))
+        val catResponse = userPetsController.createPet(firstUser.token, firstUser.id, CreatePetRequest("", PetSpecies.Cat.toString()))
 
         assertEquals(catResponse.species, PetSpecies.Cat)
         assertEquals(1, petController.getAll().size)
 
-        val dragonResponse = userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Dragon.toString()))
+        val dragonResponse = userPetsController.createPet(firstUser.token, firstUser.id, CreatePetRequest("", PetSpecies.Dragon.toString()))
 
         assertEquals(dragonResponse.species, PetSpecies.Dragon)
         assertEquals(2, petController.getAll().size)
@@ -92,7 +92,7 @@ class UserPetCreationTests {
     @Test
     fun createPetWrongUserId() {
         try {
-            userPetsController.createPet(firstUser.token!!, "Wrong ID", CreatePetRequest("", PetSpecies.Dog.toString()))
+            userPetsController.createPet(firstUser.token, "Wrong ID", CreatePetRequest("", PetSpecies.Dog.toString()))
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.NOT_FOUND, e.status)
             assertTrue { petController.getAll().isEmpty() }
@@ -102,7 +102,7 @@ class UserPetCreationTests {
     @Test
     fun createPetWrongAuth() {
         try {
-            userPetsController.createPet("Wrong Token", firstUser.id!!, CreatePetRequest("", PetSpecies.Cow.toString()))
+            userPetsController.createPet("Wrong Token", firstUser.id, CreatePetRequest("", PetSpecies.Cow.toString()))
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.status)
             assertTrue { petController.getAll().isEmpty() }
@@ -112,7 +112,7 @@ class UserPetCreationTests {
     @Test
     fun createPetWrongUser() {
         try {
-            userPetsController.createPet(firstUser.token!!, secondUser.id!!, CreatePetRequest("", PetSpecies.Dog.toString()))
+            userPetsController.createPet(firstUser.token, secondUser.id, CreatePetRequest("", PetSpecies.Dog.toString()))
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.status)
             assertTrue { petController.getAll().isEmpty() }
@@ -121,15 +121,15 @@ class UserPetCreationTests {
 
     @Test
     fun getPetsByUser() {
-        userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Rabbit.toString()))
-        userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", PetSpecies.Horse.toString()))
+        userPetsController.createPet(firstUser.token, firstUser.id, CreatePetRequest("", PetSpecies.Rabbit.toString()))
+        userPetsController.createPet(firstUser.token, firstUser.id, CreatePetRequest("", PetSpecies.Horse.toString()))
 
-        userPetsController.createPet(secondUser.token!!, secondUser.id!!, CreatePetRequest("", PetSpecies.Cat.toString()))
+        userPetsController.createPet(secondUser.token, secondUser.id, CreatePetRequest("", PetSpecies.Cat.toString()))
 
-        val firstUserPets = userPetsController.getPets(firstUser.id!!)
+        val firstUserPets = userPetsController.getPets(firstUser.id)
         assertEquals(2, firstUserPets.size)
 
-        val secondUserPets = userPetsController.getPets(secondUser.id!!)
+        val secondUserPets = userPetsController.getPets(secondUser.id)
         assertEquals(1, secondUserPets.size)
     }
 
@@ -141,7 +141,7 @@ class UserPetCreationTests {
     @Test
     fun invalidSpecies() {
         try {
-            userPetsController.createPet(firstUser.token!!, firstUser.id!!, CreatePetRequest("", "Invalid Pet Species"))
+            userPetsController.createPet(firstUser.token, firstUser.id, CreatePetRequest("", "Invalid Pet Species"))
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.BAD_REQUEST, e.status)
             assertTrue { petController.getAll().isEmpty() }

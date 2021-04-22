@@ -76,12 +76,12 @@ class SetCurrentPetTests {
     fun beforeAll() {
         userController.registerUser(firstUserRequest)
         firstUser = loginController.login(firstUserLogin)
-        firstUserFirstPet = userPetsController.createPet(firstUser.token!!, firstUser.id!!, firstUserFirstPetRequest)
-        firstUserSecondPet = userPetsController.createPet(firstUser.token!!, firstUser.id!!, firstUserSecondPetRequest)
+        firstUserFirstPet = userPetsController.createPet(firstUser.token, firstUser.id, firstUserFirstPetRequest)
+        firstUserSecondPet = userPetsController.createPet(firstUser.token, firstUser.id, firstUserSecondPetRequest)
 
         userController.registerUser(secondUserRequest)
         secondUser = loginController.login(secondUserLogin)
-        secondUserPet = userPetsController.createPet(secondUser.token!!, secondUser.id!!, secondUserPetRequest)
+        secondUserPet = userPetsController.createPet(secondUser.token, secondUser.id, secondUserPetRequest)
     }
 
     @AfterAll
@@ -92,46 +92,46 @@ class SetCurrentPetTests {
 
     @BeforeEach
     fun beforeEach() {
-        val first = userService.getById(firstUser.id!!)
+        val first = userService.getById(firstUser.id)
         first?.currentPetId = null
         userService.update(first!!)
 
-        val second = userService.getById(secondUser.id!!)
+        val second = userService.getById(secondUser.id)
         second?.currentPetId = null
         userService.update(second!!)
     }
 
     @Test
     fun noCurrentPet() {
-        val firstResponse = userPetsController.getCurrentPet(firstUser.id!!)
+        val firstResponse = userPetsController.getCurrentPet(firstUser.id)
         assertNull(firstResponse)
 
-        val secondResponse = userPetsController.getCurrentPet(secondUser.id!!)
+        val secondResponse = userPetsController.getCurrentPet(secondUser.id)
         assertNull(secondResponse)
     }
 
     @Test
     fun setCurrentPet() {
-        userPetsController.setCurrentPet(firstUser.token!!, firstUser.id!!, firstUserFirstPet.id!!)
-        var responsePet = userPetsController.getCurrentPet(firstUser.id!!)
+        userPetsController.setCurrentPet(firstUser.token, firstUser.id, firstUserFirstPet.id!!)
+        var responsePet = userPetsController.getCurrentPet(firstUser.id)
 
         assertNotNull(responsePet)
         assertEquals(firstUserFirstPet.id, responsePet.id)
 
-        userPetsController.setCurrentPet(firstUser.token!!, firstUser.id!!, firstUserSecondPet.id!!)
-        responsePet = userPetsController.getCurrentPet(firstUser.id!!)
+        userPetsController.setCurrentPet(firstUser.token, firstUser.id, firstUserSecondPet.id!!)
+        responsePet = userPetsController.getCurrentPet(firstUser.id)
 
         assertNotNull(responsePet)
         assertEquals(firstUserSecondPet.id, responsePet.id)
 
-        responsePet = userPetsController.getCurrentPet(secondUser.id!!)
+        responsePet = userPetsController.getCurrentPet(secondUser.id)
         assertNull(responsePet)
     }
 
     @Test
     fun setCurrentPetWrongAuth() {
         try {
-            userPetsController.setCurrentPet(firstUser.token!!, secondUser.id!!, secondUserPet.id!!)
+            userPetsController.setCurrentPet(firstUser.token, secondUser.id, secondUserPet.id!!)
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.status)
         }
@@ -140,7 +140,7 @@ class SetCurrentPetTests {
     @Test
     fun setCurrentPetWrongUser() {
         try {
-            userPetsController.setCurrentPet(firstUser.token!!, firstUser.id!!, secondUserPet.id!!)
+            userPetsController.setCurrentPet(firstUser.token, firstUser.id, secondUserPet.id!!)
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.status)
         }

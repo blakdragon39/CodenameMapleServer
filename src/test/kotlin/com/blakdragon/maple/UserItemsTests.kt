@@ -50,21 +50,21 @@ class UserItemsTests {
     @AfterEach
     fun afterEach() {
         //todo better integrated tests
-        val user = userService.getById(firstUser.id!!)
+        val user = userService.getById(firstUser.id)
         user?.items?.clear()
         userService.update(user!!)
     }
 
     @Test
     fun noItems() {
-        val result = userItemsController.getItems(firstUser.token!!, firstUser.id!!)
+        val result = userItemsController.getItems(firstUser.token, firstUser.id)
         assertEquals(0, result.size)
     }
 
     @Test
     fun hasItems() {
         //todo replace with other API tests?
-        val user = userService.getById(firstUser.id!!)
+        val user = userService.getById(firstUser.id)
         val item1 = MapleApplication.items[0]
         val item2 = MapleApplication.items[2]
 
