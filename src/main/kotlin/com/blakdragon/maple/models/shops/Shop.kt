@@ -2,6 +2,7 @@ package com.blakdragon.maple.models.shops
 
 import com.blakdragon.maple.MapleApplication
 import com.blakdragon.maple.models.Item
+import com.blakdragon.maple.services.ItemService
 import com.blakdragon.maple.services.ShopService
 import org.springframework.data.annotation.Id
 import org.springframework.data.mongodb.core.mapping.Document
@@ -22,10 +23,11 @@ val shops: List<Shop> = listOf(
     )
 )
 
-class ShopResponse(shop: Shop) {
+class ShopResponse(
+    shop: Shop,
+    itemService: ItemService
+) {
     val id: String = shop.id
     val name: String = shop.name
-    val items: List<Item> = shop.items.map { itemId ->
-        MapleApplication.items.find { it.id == itemId } ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
-    }
+    val items = itemService.getItems(shop.items)
 }

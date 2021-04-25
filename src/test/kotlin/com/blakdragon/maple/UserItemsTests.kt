@@ -4,6 +4,7 @@ import com.blakdragon.maple.controllers.LoginController
 import com.blakdragon.maple.controllers.UserController
 import com.blakdragon.maple.controllers.UserItemsController
 import com.blakdragon.maple.models.*
+import com.blakdragon.maple.services.ItemService
 import com.blakdragon.maple.services.UserDAO
 import com.blakdragon.maple.services.UserService
 import org.junit.jupiter.api.*
@@ -32,6 +33,7 @@ class UserItemsTests {
     @Autowired private lateinit var userItemsController: UserItemsController
 
     @Autowired private lateinit var userService: UserService
+    @Autowired private lateinit var itemService: ItemService
     @Autowired private lateinit var userDAO: UserDAO
 
     private lateinit var firstUser: UserLoginResponse
@@ -62,11 +64,18 @@ class UserItemsTests {
     }
 
     @Test
+    fun addItems() {
+//        userItemsController.addItem()
+    }
+
+    //todo add items
+
+    @Test
     fun hasItems() {
         //todo replace with other API tests?
         val user = userService.getById(firstUser.id)
-        val item1 = MapleApplication.items[0]
-        val item2 = MapleApplication.items[2]
+        val item1 = itemService.items[0]
+        val item2 = itemService.items[2]
 
         user?.items?.add(item1.id)
         userService.update(user!!)

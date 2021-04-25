@@ -13,3 +13,9 @@ abstract class Item (
 
     override fun hashCode() = id.hashCode()
 }
+
+
+class ItemRequest(
+    val userId: String,
+    val itemId: String
+)

@@ -1,7 +1,6 @@
 package com.blakdragon.maple
 
-import com.blakdragon.maple.models.Item
-import com.blakdragon.maple.models.wellbeingItems
+import com.blakdragon.maple.services.ItemService
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
@@ -13,28 +12,20 @@ import kotlin.random.Random
 
 @SpringBootApplication
 @EnableSwagger2
-class MapleApplication() : ApplicationRunner {
+class MapleApplication(val itemService: ItemService) : ApplicationRunner {
 
     companion object {
         val random = Random(System.currentTimeMillis())
-        lateinit var items: List<Item>
     }
 
     //startup logic
     override fun run(args: ApplicationArguments) {
-        initItems()
         checkItemIdsUnique()
     }
 
-    private fun initItems() {
-        val items: MutableList<Item> = mutableListOf()
-        items.addAll(wellbeingItems)
-
-        MapleApplication.items = items
-    }
 
     private fun checkItemIdsUnique() {
-        items
+        itemService.items
             .groupBy { id -> id }
             .filter { idGroup -> idGroup.value.size > 1 }
             .forEach { idGroup -> throw Exception("Found duplicate key ${idGroup.key}") }
