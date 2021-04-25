@@ -1,7 +1,7 @@
 package com.blakdragon.maple
 
 import com.blakdragon.maple.controllers.UserController
-import com.blakdragon.maple.models.RegisterRequest
+import com.blakdragon.maple.models.requests.RegisterRequest
 import com.blakdragon.maple.services.UserDAO
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired

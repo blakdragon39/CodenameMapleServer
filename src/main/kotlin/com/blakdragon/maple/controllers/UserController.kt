@@ -1,8 +1,8 @@
 package com.blakdragon.maple.controllers
 
-import com.blakdragon.maple.models.RegisterRequest
 import com.blakdragon.maple.models.User
-import com.blakdragon.maple.models.UserResponse
+import com.blakdragon.maple.models.requests.RegisterRequest
+import com.blakdragon.maple.models.requests.UserResponse
 import com.blakdragon.maple.services.UserService
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.http.HttpStatus

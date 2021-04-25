@@ -1,6 +1,5 @@
 package com.blakdragon.maple.models
 
-//todo description
 abstract class Item (
     val id: String,
     val description: String,
@@ -13,9 +12,3 @@ abstract class Item (
 
     override fun hashCode() = id.hashCode()
 }
-
-
-class ItemRequest(
-    val userId: String,
-    val itemId: String
-)

@@ -2,8 +2,8 @@ package com.blakdragon.maple
 
 import com.blakdragon.maple.controllers.LoginController
 import com.blakdragon.maple.controllers.UserController
-import com.blakdragon.maple.models.LoginRequest
-import com.blakdragon.maple.models.RegisterRequest
+import com.blakdragon.maple.models.requests.LoginRequest
+import com.blakdragon.maple.models.requests.RegisterRequest
 import com.blakdragon.maple.services.UserDAO
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test

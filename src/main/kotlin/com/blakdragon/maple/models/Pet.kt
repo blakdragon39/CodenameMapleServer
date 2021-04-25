@@ -37,8 +37,3 @@ enum class PetKit {
     Fruit,
     SabreTooth
 }
-
-data class CreatePetRequest(
-    val name: String,
-    val species: String,
-)

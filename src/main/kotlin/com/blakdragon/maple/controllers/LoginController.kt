@@ -1,8 +1,7 @@
 package com.blakdragon.maple.controllers
 
-import com.blakdragon.maple.models.LoginRequest
-import com.blakdragon.maple.models.UserLoginResponse
-import com.blakdragon.maple.models.UserResponse
+import com.blakdragon.maple.models.requests.LoginRequest
+import com.blakdragon.maple.models.requests.UserLoginResponse
 import com.blakdragon.maple.services.UserService
 import com.blakdragon.maple.utils.EXPIRATION_PERIOD
 import org.mindrot.jbcrypt.BCrypt

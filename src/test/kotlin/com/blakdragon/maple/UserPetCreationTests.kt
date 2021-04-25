@@ -5,6 +5,10 @@ import com.blakdragon.maple.controllers.PetController
 import com.blakdragon.maple.controllers.UserController
 import com.blakdragon.maple.controllers.UserPetsController
 import com.blakdragon.maple.models.*
+import com.blakdragon.maple.models.requests.CreatePetRequest
+import com.blakdragon.maple.models.requests.LoginRequest
+import com.blakdragon.maple.models.requests.RegisterRequest
+import com.blakdragon.maple.models.requests.UserLoginResponse
 import com.blakdragon.maple.services.PetDAO
 import com.blakdragon.maple.services.UserDAO
 import org.junit.jupiter.api.*

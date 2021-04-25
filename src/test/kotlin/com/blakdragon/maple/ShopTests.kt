@@ -4,9 +4,9 @@ import com.blakdragon.maple.controllers.LoginController
 import com.blakdragon.maple.controllers.UserController
 import com.blakdragon.maple.controllers.UserItemsController
 import com.blakdragon.maple.controllers.shops.ShopController
-import com.blakdragon.maple.models.LoginRequest
-import com.blakdragon.maple.models.RegisterRequest
-import com.blakdragon.maple.models.UserLoginResponse
+import com.blakdragon.maple.models.requests.LoginRequest
+import com.blakdragon.maple.models.requests.RegisterRequest
+import com.blakdragon.maple.models.requests.UserLoginResponse
 import com.blakdragon.maple.models.shops.BuyRequest
 import com.blakdragon.maple.models.shops.shops
 import com.blakdragon.maple.services.ShopDAO

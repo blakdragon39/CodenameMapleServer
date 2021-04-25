@@ -1,6 +1,7 @@
 package com.blakdragon.maple.controllers
 
 import com.blakdragon.maple.models.*
+import com.blakdragon.maple.models.requests.CreatePetRequest
 import com.blakdragon.maple.services.PetService
 import com.blakdragon.maple.services.UserService
 import org.springframework.http.HttpStatus
