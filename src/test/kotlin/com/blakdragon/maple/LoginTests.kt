@@ -3,8 +3,8 @@ package com.blakdragon.maple
 import com.blakdragon.maple.controllers.LoginController
 import com.blakdragon.maple.controllers.UserController
 import com.blakdragon.maple.models.requests.LoginRequest
-import com.blakdragon.maple.models.requests.RegisterRequest
 import com.blakdragon.maple.services.UserDAO
+import com.blakdragon.maple.utils.TestUserLogins
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -13,16 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
 
-private val firstUserRegistration = RegisterRequest(
-    email = "1",
-    password = "1",
-    displayName = "1"
-)
 
-private val firstUserLogin = LoginRequest(
-    email = firstUserRegistration.email,
-    password = firstUserRegistration.password
-)
 
 @SpringBootTest
 class LoginTests {
@@ -40,7 +31,7 @@ class LoginTests {
     @Test
     fun loginNoUsers() {
         try {
-            loginController.login(firstUserLogin)
+            loginController.login(TestUserLogins.odinLoginRequest)
         } catch (e: ResponseStatusException) {
             assertEquals(e.status, HttpStatus.NOT_FOUND)
         }
@@ -48,19 +39,19 @@ class LoginTests {
 
     @Test
     fun loginCorrectPassword() {
-        val registerResponse = userController.registerUser(firstUserRegistration)
-        val loginResponse = loginController.login(firstUserLogin)
+        val registerResponse = userController.registerUser(TestUserLogins.odinRegisterRequest)
+        val loginResponse = loginController.login(TestUserLogins.odinLoginRequest)
 
         assertEquals(registerResponse.id, loginResponse.id)
     }
 
     @Test
     fun loginIncorrectPassword() {
-        userController.registerUser(firstUserRegistration)
+        userController.registerUser(TestUserLogins.odinRegisterRequest)
 
         try {
             loginController.login(LoginRequest(
-                email = firstUserLogin.email,
+                email = TestUserLogins.odinLoginRequest.email,
                 password = "Incorrect Password"
             ))
         } catch (e: ResponseStatusException) {

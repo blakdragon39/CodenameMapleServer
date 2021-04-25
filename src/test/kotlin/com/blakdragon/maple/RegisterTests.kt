@@ -1,8 +1,8 @@
 package com.blakdragon.maple
 
 import com.blakdragon.maple.controllers.UserController
-import com.blakdragon.maple.models.requests.RegisterRequest
 import com.blakdragon.maple.services.UserDAO
+import com.blakdragon.maple.utils.TestUserLogins
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -11,17 +11,6 @@ import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
-private val firstUserRequest = RegisterRequest(
-    email = "1",
-    password = "1",
-    displayName = "1"
-)
-
-private val secondUserRequest = RegisterRequest(
-    email = "2",
-    password = "2",
-    displayName = "2"
-)
 
 @SpringBootTest
 class RegisterTests {
@@ -39,17 +28,17 @@ class RegisterTests {
     fun registerFirstUser() {
         assertTrue { userController.getAll().isEmpty() }
 
-        userController.registerUser(firstUserRequest)
+        userController.registerUser(TestUserLogins.odinRegisterRequest)
 
         assertEquals(1, userController.getAll().size)
     }
 
     @Test
     fun registerSameUser() {
-        userController.registerUser(firstUserRequest)
+        userController.registerUser(TestUserLogins.odinRegisterRequest)
 
         try {
-            userController.registerUser(firstUserRequest)
+            userController.registerUser(TestUserLogins.odinRegisterRequest)
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.BAD_REQUEST, e.status)
         }
@@ -59,8 +48,8 @@ class RegisterTests {
 
     @Test
     fun registerMultipleUsers() {
-        userController.registerUser(firstUserRequest)
-        userController.registerUser(secondUserRequest)
+        userController.registerUser(TestUserLogins.odinRegisterRequest)
+        userController.registerUser(TestUserLogins.freyaRegisterRequest)
         assertEquals(2, userController.getAll().size)
     }
 }

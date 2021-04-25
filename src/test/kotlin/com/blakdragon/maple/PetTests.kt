@@ -1,12 +1,9 @@
 package com.blakdragon.maple
 
 import com.blakdragon.maple.controllers.PetController
-import com.blakdragon.maple.models.Pet
-import com.blakdragon.maple.models.PetKit
-import com.blakdragon.maple.models.PetSpecies
-import com.blakdragon.maple.models.Wellbeing
 import com.blakdragon.maple.services.PetDAO
 import com.blakdragon.maple.services.PetService
+import com.blakdragon.maple.utils.TestPets
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -16,23 +13,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
 
-private val firstPet = Pet(
-    id = "firstId",
-    userId = "userId",
-    name = "name",
-    species = PetSpecies.Cat,
-    kit = PetKit.Fire,
-    wellbeing = Wellbeing(0, 0, 0)
-)
-
-private val secondPet = Pet(
-    id = "secondId",
-    userId = "userId2",
-    name = "name2",
-    species = PetSpecies.Cat,
-    kit = PetKit.Fire,
-    wellbeing = Wellbeing(0, 0, 0)
-)
 
 @SpringBootTest
 class PetTests {
@@ -69,16 +49,16 @@ class PetTests {
 
     @Test
     fun getBydId() {
-        petService.insert(firstPet)
+        petService.insert(TestPets.jupiter)
 
-        val getPet = petController.get(firstPet.id!!)
-        assertEquals(firstPet, getPet)
+        val getPet = petController.get(TestPets.jupiter.id!!)
+        assertEquals(TestPets.jupiter, getPet)
     }
 
     @Test
     fun getAll() {
-        petService.insert(firstPet)
-        petService.insert(secondPet)
+        petService.insert(TestPets.jupiter)
+        petService.insert(TestPets.venus)
 
         val result = petController.getAll()
         assertEquals(2, result.size)

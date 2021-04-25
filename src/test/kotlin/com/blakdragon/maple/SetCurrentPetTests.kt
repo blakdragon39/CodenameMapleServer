@@ -4,13 +4,12 @@ import com.blakdragon.maple.controllers.LoginController
 import com.blakdragon.maple.controllers.UserController
 import com.blakdragon.maple.controllers.UserPetsController
 import com.blakdragon.maple.models.*
-import com.blakdragon.maple.models.requests.CreatePetRequest
-import com.blakdragon.maple.models.requests.LoginRequest
-import com.blakdragon.maple.models.requests.RegisterRequest
 import com.blakdragon.maple.models.requests.UserLoginResponse
 import com.blakdragon.maple.services.PetDAO
 import com.blakdragon.maple.services.UserDAO
 import com.blakdragon.maple.services.UserService
+import com.blakdragon.maple.utils.TestPets
+import com.blakdragon.maple.utils.TestUserLogins
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -20,42 +19,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
 import kotlin.test.assertNull
 
-private val firstUserRequest = RegisterRequest(
-    email = "1",
-    password = "1",
-    displayName = "1"
-)
-
-private val firstUserLogin = LoginRequest(
-    email = firstUserRequest.email,
-    password = firstUserRequest.password
-)
-
-private val firstUserFirstPetRequest = CreatePetRequest(
-    name = "1",
-    species = PetSpecies.Dolphin.toString()
-)
-
-private val firstUserSecondPetRequest = CreatePetRequest(
-    name = "2",
-    species = PetSpecies.Rabbit.toString()
-)
-
-private val secondUserRequest = RegisterRequest(
-    email = "2",
-    password = "2",
-    displayName = "2"
-)
-
-private val secondUserLogin = LoginRequest(
-    email = secondUserRequest.email,
-    password = secondUserRequest.password
-)
-
-private val secondUserPetRequest = CreatePetRequest(
-    name = "3",
-    species = PetSpecies.Dragon.toString()
-)
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -69,23 +32,23 @@ class SetCurrentPetTests {
     @Autowired private lateinit var userDAO: UserDAO
     @Autowired private lateinit var userService: UserService
 
-    private lateinit var firstUser: UserLoginResponse
-    private lateinit var firstUserFirstPet: Pet
-    private lateinit var firstUserSecondPet: Pet
+    private lateinit var odin: UserLoginResponse
+    private lateinit var jupiter: Pet
+    private lateinit var venus: Pet
 
-    private lateinit var secondUser: UserLoginResponse
-    private lateinit var secondUserPet: Pet
+    private lateinit var freya: UserLoginResponse
+    private lateinit var mercury: Pet
 
     @BeforeAll
     fun beforeAll() {
-        userController.registerUser(firstUserRequest)
-        firstUser = loginController.login(firstUserLogin)
-        firstUserFirstPet = userPetsController.createPet(firstUser.token, firstUser.id, firstUserFirstPetRequest)
-        firstUserSecondPet = userPetsController.createPet(firstUser.token, firstUser.id, firstUserSecondPetRequest)
+        userController.registerUser(TestUserLogins.odinRegisterRequest)
+        odin = loginController.login(TestUserLogins.odinLoginRequest)
+        jupiter = userPetsController.createPet(odin.token, odin.id, TestPets.jupiterCreateRequest)
+        venus = userPetsController.createPet(odin.token, odin.id, TestPets.venusCreateRequest)
 
-        userController.registerUser(secondUserRequest)
-        secondUser = loginController.login(secondUserLogin)
-        secondUserPet = userPetsController.createPet(secondUser.token, secondUser.id, secondUserPetRequest)
+        userController.registerUser(TestUserLogins.freyaRegisterRequest)
+        freya = loginController.login(TestUserLogins.freyaLoginRequest)
+        mercury = userPetsController.createPet(freya.token, freya.id, TestPets.mercuryCreateRequest)
     }
 
     @AfterAll
@@ -96,46 +59,46 @@ class SetCurrentPetTests {
 
     @BeforeEach
     fun beforeEach() {
-        val first = userService.getById(firstUser.id)
+        val first = userService.getById(odin.id)
         first?.currentPetId = null
         userService.update(first!!)
 
-        val second = userService.getById(secondUser.id)
+        val second = userService.getById(freya.id)
         second?.currentPetId = null
         userService.update(second!!)
     }
 
     @Test
     fun noCurrentPet() {
-        val firstResponse = userPetsController.getCurrentPet(firstUser.id)
+        val firstResponse = userPetsController.getCurrentPet(odin.id)
         assertNull(firstResponse)
 
-        val secondResponse = userPetsController.getCurrentPet(secondUser.id)
+        val secondResponse = userPetsController.getCurrentPet(freya.id)
         assertNull(secondResponse)
     }
 
     @Test
     fun setCurrentPet() {
-        userPetsController.setCurrentPet(firstUser.token, firstUser.id, firstUserFirstPet.id!!)
-        var responsePet = userPetsController.getCurrentPet(firstUser.id)
+        userPetsController.setCurrentPet(odin.token, odin.id, jupiter.id!!)
+        var responsePet = userPetsController.getCurrentPet(odin.id)
 
         assertNotNull(responsePet)
-        assertEquals(firstUserFirstPet.id, responsePet.id)
+        assertEquals(jupiter.id, responsePet.id)
 
-        userPetsController.setCurrentPet(firstUser.token, firstUser.id, firstUserSecondPet.id!!)
-        responsePet = userPetsController.getCurrentPet(firstUser.id)
+        userPetsController.setCurrentPet(odin.token, odin.id, venus.id!!)
+        responsePet = userPetsController.getCurrentPet(odin.id)
 
         assertNotNull(responsePet)
-        assertEquals(firstUserSecondPet.id, responsePet.id)
+        assertEquals(venus.id, responsePet.id)
 
-        responsePet = userPetsController.getCurrentPet(secondUser.id)
+        responsePet = userPetsController.getCurrentPet(freya.id)
         assertNull(responsePet)
     }
 
     @Test
     fun setCurrentPetWrongAuth() {
         try {
-            userPetsController.setCurrentPet(firstUser.token, secondUser.id, secondUserPet.id!!)
+            userPetsController.setCurrentPet(odin.token, freya.id, mercury.id!!)
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.status)
         }
@@ -144,7 +107,7 @@ class SetCurrentPetTests {
     @Test
     fun setCurrentPetWrongUser() {
         try {
-            userPetsController.setCurrentPet(firstUser.token, firstUser.id, secondUserPet.id!!)
+            userPetsController.setCurrentPet(odin.token, odin.id, mercury.id!!)
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.status)
         }
