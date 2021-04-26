@@ -61,6 +61,4 @@ class UserItemsTests : UsersLoggedInTests() {
         response = userItemsController.getItems(odin.token, odin.id)
         assertEquals(3, response.size)
     }
-
-    //todo test using an item
 }

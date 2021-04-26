@@ -1,12 +1,7 @@
 package com.blakdragon.maple
 
-import com.blakdragon.maple.controllers.UserPetsController
-import com.blakdragon.maple.models.*
-import com.blakdragon.maple.services.PetDAO
-import com.blakdragon.maple.services.UserDAO
 import com.blakdragon.maple.services.UserService
-import com.blakdragon.maple.utils.TestPets
-import com.blakdragon.maple.utils.UsersLoggedInTests
+import com.blakdragon.maple.utils.UsersLoggedInWithPetsTests
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -19,34 +14,9 @@ import kotlin.test.assertNull
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SetCurrentPetTests : UsersLoggedInTests() {
+class SetCurrentPetTests : UsersLoggedInWithPetsTests() {
 
-    @Autowired private lateinit var userPetsController: UserPetsController
-
-    @Autowired private lateinit var petDAO: PetDAO
-    @Autowired private lateinit var userDAO: UserDAO
     @Autowired private lateinit var userService: UserService
-
-    //todo move pets to super class
-    private lateinit var jupiter: Pet
-    private lateinit var venus: Pet
-
-    private lateinit var mercury: Pet
-
-    @BeforeAll
-    override fun beforeAll() {
-        super.beforeAll()
-        jupiter = userPetsController.createPet(odin.token, odin.id, TestPets.jupiterCreateRequest)
-        venus = userPetsController.createPet(odin.token, odin.id, TestPets.venusCreateRequest)
-
-        mercury = userPetsController.createPet(freya.token, freya.id, TestPets.mercuryCreateRequest)
-    }
-
-    @AfterAll
-    override fun afterAll() {
-        super.afterAll()
-        petDAO.deleteAll()
-    }
 
     @BeforeEach
     fun beforeEach() {
@@ -70,17 +40,17 @@ class SetCurrentPetTests : UsersLoggedInTests() {
 
     @Test
     fun setCurrentPet() {
-        userPetsController.setCurrentPet(odin.token, odin.id, jupiter.id!!)
+        userPetsController.setCurrentPet(odin.token, odin.id, odinsPets.jupiter.id!!)
         var responsePet = userPetsController.getCurrentPet(odin.id)
 
         assertNotNull(responsePet)
-        assertEquals(jupiter.id, responsePet.id)
+        assertEquals(odinsPets.jupiter.id, responsePet.id)
 
-        userPetsController.setCurrentPet(odin.token, odin.id, venus.id!!)
+        userPetsController.setCurrentPet(odin.token, odin.id, odinsPets.venus.id!!)
         responsePet = userPetsController.getCurrentPet(odin.id)
 
         assertNotNull(responsePet)
-        assertEquals(venus.id, responsePet.id)
+        assertEquals(odinsPets.venus.id, responsePet.id)
 
         responsePet = userPetsController.getCurrentPet(freya.id)
         assertNull(responsePet)
@@ -89,7 +59,7 @@ class SetCurrentPetTests : UsersLoggedInTests() {
     @Test
     fun setCurrentPetWrongAuth() {
         try {
-            userPetsController.setCurrentPet(odin.token, freya.id, mercury.id!!)
+            userPetsController.setCurrentPet(odin.token, freya.id, freyasPets.mercury.id!!)
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.status)
         }
@@ -98,7 +68,7 @@ class SetCurrentPetTests : UsersLoggedInTests() {
     @Test
     fun setCurrentPetWrongUser() {
         try {
-            userPetsController.setCurrentPet(odin.token, odin.id, mercury.id!!)
+            userPetsController.setCurrentPet(odin.token, odin.id, freyasPets.mercury.id!!)
         } catch (e: ResponseStatusException) {
             assertEquals(HttpStatus.UNAUTHORIZED, e.status)
         }

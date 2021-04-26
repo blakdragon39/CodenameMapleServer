@@ -1,10 +1,10 @@
 package com.blakdragon.maple
 
-import com.blakdragon.maple.controllers.UserController
+import com.blakdragon.maple.controllers.UserItemsController
+import com.blakdragon.maple.models.items.MoodItems
+import com.blakdragon.maple.models.requests.UseItemRequest
 import com.blakdragon.maple.services.ItemService
-import com.blakdragon.maple.utils.TestUserLogins
-import org.junit.jupiter.api.AfterAll
-import org.junit.jupiter.api.BeforeAll
+import com.blakdragon.maple.utils.UsersLoggedInWithPetsTests
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestInstance
 import org.springframework.beans.factory.annotation.Autowired
@@ -12,10 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UseItemTests {
+class UseItemTests : UsersLoggedInWithPetsTests() {
 
-    //todo move tests with login to abstract base class
-    @Autowired private lateinit var userController: UserController
+    @Autowired private lateinit var userItemsController: UserItemsController
 
     @Autowired private lateinit var itemService: ItemService
 
@@ -25,29 +24,23 @@ class UseItemTests {
     //todo test use hygiene item
     //todo test use mood item
 
-    @BeforeAll
-    fun beforeAll() {
-//        userController.registerUser(TestUserLogins.odinRegisterRequest)
-//        odin = loginController.login(TestUserLogins.odinLoginRequest)
-    }
-
-    @AfterAll
-    fun afterAll() {
-//        userDAO.deleteAll()
-    }
-
     @Test
-    fun testHygiene() {
-//        val toothbrush = itemService.getItem()
+    fun userDoesntHaveItem() {
+//        userItemsController.useItem(odin.token, odin.id, UseItemRequest(MoodItems.ball, ))
     }
 
-    @Test
-    fun testHunger() {
-
-    }
-
-    @Test
-    fun testMood() {
-
-    }
+//    @Test
+//    fun testHygiene() {
+//
+//    }
+//
+//    @Test
+//    fun testHunger() {
+//
+//    }
+//
+//    @Test
+//    fun testMood() {
+//
+//    }
 }
