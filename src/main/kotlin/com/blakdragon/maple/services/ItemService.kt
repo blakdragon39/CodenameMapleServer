@@ -1,7 +1,9 @@
 package com.blakdragon.maple.services
 
 import com.blakdragon.maple.models.Item
-import com.blakdragon.maple.models.wellbeingItems
+import com.blakdragon.maple.models.items.HungerItems
+import com.blakdragon.maple.models.items.HygieneItems
+import com.blakdragon.maple.models.items.MoodItems
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import org.springframework.web.server.ResponseStatusException
@@ -12,8 +14,12 @@ class ItemService {
     final val items: List<Item>
 
     init {
+        // todo add all items with reflection?
+        // https://github.com/ronmamo/reflections
         val addItems: MutableList<Item> = mutableListOf()
-        addItems.addAll(wellbeingItems)
+        addItems.addAll(HungerItems.getAll())
+        addItems.addAll(HygieneItems.getAll())
+        addItems.addAll(MoodItems.getAll())
 
         items = addItems
     }

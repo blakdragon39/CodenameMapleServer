@@ -3,8 +3,10 @@ package com.blakdragon.maple
 import com.blakdragon.maple.controllers.LoginController
 import com.blakdragon.maple.controllers.UserController
 import com.blakdragon.maple.controllers.UserItemsController
+import com.blakdragon.maple.models.items.HungerItems
+import com.blakdragon.maple.models.items.HygieneItems
+import com.blakdragon.maple.models.items.MoodItems
 import com.blakdragon.maple.models.requests.UserLoginResponse
-import com.blakdragon.maple.services.ItemService
 import com.blakdragon.maple.services.UserDAO
 import com.blakdragon.maple.services.UserService
 import com.blakdragon.maple.utils.TestUserLogins
@@ -24,7 +26,6 @@ class UserItemsTests {
     @Autowired private lateinit var userItemsController: UserItemsController
 
     @Autowired private lateinit var userService: UserService
-    @Autowired private lateinit var itemService: ItemService
     @Autowired private lateinit var userDAO: UserDAO
 
     private lateinit var odin: UserLoginResponse
@@ -56,34 +57,28 @@ class UserItemsTests {
 
     @Test
     fun addItems() {
-        val firstItem = itemService.items[0]
-        val secondItem = itemService.items[1]
-
-        val firstResponse = userItemsController.addItem(odin.token, odin.id, firstItem.id)
+        val firstResponse = userItemsController.addItem(odin.token, odin.id, HungerItems.apple.id)
         assertEquals(1, firstResponse.size)
-        assertTrue { firstResponse.contains(firstItem) }
+        assertTrue { firstResponse.contains(HungerItems.apple) }
 
-        val secondResponse = userItemsController.addItem(odin.token, odin.id, secondItem.id)
+        val secondResponse = userItemsController.addItem(odin.token, odin.id, HygieneItems.toothBrush.id)
         assertEquals(2, secondResponse.size)
-        assertTrue { secondResponse.contains(secondItem) }
+        assertTrue { secondResponse.contains(HygieneItems.toothBrush) }
     }
 
     @Test
     fun getItems() {
-        val firstItem = itemService.items[0]
-        val secondItem = itemService.items[2]
-
-        userItemsController.addItem(odin.token, odin.id, firstItem.id)
+        userItemsController.addItem(odin.token, odin.id, MoodItems.ball.id)
         var response = userItemsController.getItems(odin.token, odin.id)
         assertEquals(1, response.size)
-        assertTrue { response.contains(firstItem) }
+        assertTrue { response.contains(MoodItems.ball) }
 
-        userItemsController.addItem(odin.token, odin.id, secondItem.id)
+        userItemsController.addItem(odin.token, odin.id, MoodItems.playground.id)
         response = userItemsController.getItems(odin.token, odin.id)
         assertEquals(2, response.size)
-        assertTrue { response.contains(secondItem) }
+        assertTrue { response.contains(MoodItems.playground) }
 
-        userItemsController.addItem(odin.token, odin.id, firstItem.id)
+        userItemsController.addItem(odin.token, odin.id, MoodItems.ball.id)
         response = userItemsController.getItems(odin.token, odin.id)
         assertEquals(3, response.size)
     }
