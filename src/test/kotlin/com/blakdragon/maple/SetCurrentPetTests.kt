@@ -1,15 +1,12 @@
 package com.blakdragon.maple
 
-import com.blakdragon.maple.controllers.LoginController
-import com.blakdragon.maple.controllers.UserController
 import com.blakdragon.maple.controllers.UserPetsController
 import com.blakdragon.maple.models.*
-import com.blakdragon.maple.models.requests.UserLoginResponse
 import com.blakdragon.maple.services.PetDAO
 import com.blakdragon.maple.services.UserDAO
 import com.blakdragon.maple.services.UserService
 import com.blakdragon.maple.utils.TestPets
-import com.blakdragon.maple.utils.TestUserLogins
+import com.blakdragon.maple.utils.UsersLoggedInTests
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -22,38 +19,32 @@ import kotlin.test.assertNull
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class SetCurrentPetTests {
+class SetCurrentPetTests : UsersLoggedInTests() {
 
-    @Autowired private lateinit var userController: UserController
-    @Autowired private lateinit var loginController: LoginController
     @Autowired private lateinit var userPetsController: UserPetsController
 
     @Autowired private lateinit var petDAO: PetDAO
     @Autowired private lateinit var userDAO: UserDAO
     @Autowired private lateinit var userService: UserService
 
-    private lateinit var odin: UserLoginResponse
+    //todo move pets to super class
     private lateinit var jupiter: Pet
     private lateinit var venus: Pet
 
-    private lateinit var freya: UserLoginResponse
     private lateinit var mercury: Pet
 
     @BeforeAll
-    fun beforeAll() {
-        userController.registerUser(TestUserLogins.odinRegisterRequest)
-        odin = loginController.login(TestUserLogins.odinLoginRequest)
+    override fun beforeAll() {
+        super.beforeAll()
         jupiter = userPetsController.createPet(odin.token, odin.id, TestPets.jupiterCreateRequest)
         venus = userPetsController.createPet(odin.token, odin.id, TestPets.venusCreateRequest)
 
-        userController.registerUser(TestUserLogins.freyaRegisterRequest)
-        freya = loginController.login(TestUserLogins.freyaLoginRequest)
         mercury = userPetsController.createPet(freya.token, freya.id, TestPets.mercuryCreateRequest)
     }
 
     @AfterAll
-    fun afterAll() {
-        userDAO.deleteAll()
+    override fun afterAll() {
+        super.afterAll()
         petDAO.deleteAll()
     }
 

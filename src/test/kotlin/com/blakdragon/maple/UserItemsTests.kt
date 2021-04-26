@@ -1,15 +1,11 @@
 package com.blakdragon.maple
 
-import com.blakdragon.maple.controllers.LoginController
-import com.blakdragon.maple.controllers.UserController
 import com.blakdragon.maple.controllers.UserItemsController
 import com.blakdragon.maple.models.items.HungerItems
 import com.blakdragon.maple.models.items.HygieneItems
 import com.blakdragon.maple.models.items.MoodItems
-import com.blakdragon.maple.models.requests.UserLoginResponse
-import com.blakdragon.maple.services.UserDAO
 import com.blakdragon.maple.services.UserService
-import com.blakdragon.maple.utils.TestUserLogins
+import com.blakdragon.maple.utils.UsersLoggedInTests
 import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
@@ -19,31 +15,14 @@ import kotlin.test.assertTrue
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class UserItemsTests {
+class UserItemsTests : UsersLoggedInTests() {
 
-    @Autowired private lateinit var userController: UserController
-    @Autowired private lateinit var loginController: LoginController
     @Autowired private lateinit var userItemsController: UserItemsController
 
     @Autowired private lateinit var userService: UserService
-    @Autowired private lateinit var userDAO: UserDAO
-
-    private lateinit var odin: UserLoginResponse
-
-    @BeforeAll
-    fun beforeAll() {
-        userController.registerUser(TestUserLogins.odinRegisterRequest)
-        odin = loginController.login(TestUserLogins.odinLoginRequest)
-    }
-
-    @AfterAll
-    fun afterAll() {
-        userDAO.deleteAll()
-    }
 
     @AfterEach
     fun afterEach() {
-        //todo better integrated tests
         val user = userService.getById(odin.id)
         user?.items?.clear()
         userService.update(user!!)
