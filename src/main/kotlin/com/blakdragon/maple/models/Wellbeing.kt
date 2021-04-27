@@ -11,3 +11,5 @@ enum class WellbeingStat {
     Hygiene,
     Mood
 }
+
+const val WELLBEING_CAP = 7

@@ -2,6 +2,7 @@ package com.blakdragon.maple
 
 import com.blakdragon.maple.controllers.PetController
 import com.blakdragon.maple.controllers.UserItemsController
+import com.blakdragon.maple.models.WELLBEING_CAP
 import com.blakdragon.maple.models.items.HungerItems
 import com.blakdragon.maple.models.items.HygieneItems
 import com.blakdragon.maple.models.items.MoodItems
@@ -14,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 @SpringBootTest
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -46,6 +48,19 @@ class UseItemTests : UsersLoggedInWithPetsTests() {
     }
 
     @Test
+    fun testHygieneCap() {
+        val item = HygieneItems.toothBrush
+
+        for (i in 1 .. WELLBEING_CAP + 1) {
+            userItemsController.addItem(odin.token, odin.id, item.id)
+            userItemsController.useItem(odin.token, odin.id, UseItemRequest(item.id, odinsPets.jupiter.id!!))
+        }
+
+        val pet = petController.get(odinsPets.jupiter.id!!)
+        assertTrue { pet.wellbeing.hygiene <= WELLBEING_CAP }
+    }
+
+    @Test
     fun testHunger() {
         val hunger = odinsPets.venus.wellbeing.hunger
         val item = HungerItems.apple
@@ -58,6 +73,19 @@ class UseItemTests : UsersLoggedInWithPetsTests() {
     }
 
     @Test
+    fun testHungerCap() {
+        val item = HungerItems.apple
+
+        for (i in 1 .. WELLBEING_CAP + 1) {
+            userItemsController.addItem(odin.token, odin.id, item.id)
+            userItemsController.useItem(odin.token, odin.id, UseItemRequest(item.id, odinsPets.jupiter.id!!))
+        }
+
+        val pet = petController.get(odinsPets.jupiter.id!!)
+        assertTrue { pet.wellbeing.hunger <= WELLBEING_CAP }
+    }
+
+    @Test
     fun testMood() {
         val mood = odinsPets.jupiter.wellbeing.mood
         val item = MoodItems.ball
@@ -67,5 +95,18 @@ class UseItemTests : UsersLoggedInWithPetsTests() {
 
         val pet = petController.get(odinsPets.jupiter.id!!)
         assertEquals(mood + item.effect, pet.wellbeing.mood)
+    }
+
+    @Test
+    fun testMoodCap() {
+        val item = MoodItems.ball
+
+        for (i in 1 .. WELLBEING_CAP + 1) {
+            userItemsController.addItem(odin.token, odin.id, item.id)
+            userItemsController.useItem(odin.token, odin.id, UseItemRequest(item.id, odinsPets.jupiter.id!!))
+        }
+
+        val pet = petController.get(odinsPets.jupiter.id!!)
+        assertTrue { pet.wellbeing.mood <= WELLBEING_CAP }
     }
 }
