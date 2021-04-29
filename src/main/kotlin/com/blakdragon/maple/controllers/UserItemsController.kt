@@ -51,6 +51,8 @@ class UserItemsController(
             is WellbeingItem -> item.consume(user, pet)
         }
 
+        user.items.remove(request.itemId)
+
         userPetService.update(pet)
         userService.update(user)
 
